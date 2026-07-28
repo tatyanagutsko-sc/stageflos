@@ -10,9 +10,12 @@ global with sharing class PricingRulesFlowImplementation implements vlocity_cmt.
 		
 		Map<String, Object> myMap = new Map<String, Object>();
 		
+		// Resolve parent SObject type name and store it for the flow
+		String parentTypeName = parent.getSObjectType().getDescribe().getName();
 		if(parent instanceof Opportunity)MyMap.put('parentType', 'Opportunity');
 		if(parent instanceof Order)MyMap.put('parentType', 'Order');
 		if(parent instanceof Quote)MyMap.put('parentType', 'Quote');
+			if(parent instanceof Asset)MyMap.put('parentType', 'Asset');
 		myFlow = new Flow.Interview.PricingRulesFlow(myMap);
       	
 		try {
@@ -32,5 +35,12 @@ global with sharing class PricingRulesFlowImplementation implements vlocity_cmt.
 		}
 		
 		
+	}
+
+	global static Integer countPriceableItems(List<SObject> itemList) {
+		if (itemList == null) {
+			return 0;
+		}
+		return itemList.size();
 	}
 }
