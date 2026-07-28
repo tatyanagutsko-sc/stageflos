@@ -3,7 +3,7 @@
     <applicationVisibilities>
         <application>Backup_Archive</application>
         <default>false</default>
-        <visible>true</visible>
+        <visible>false</visible>
     </applicationVisibilities>
     <applicationVisibilities>
         <application>Console_App</application>
@@ -17,8 +17,8 @@
     </applicationVisibilities>
     <applicationVisibilities>
         <application>Industries_CPQ</application>
-        <default>true</default>
-        <visible>false</visible>
+        <default>false</default>
+        <visible>true</visible>
     </applicationVisibilities>
     <applicationVisibilities>
         <application>OmniStudio_Console</application>

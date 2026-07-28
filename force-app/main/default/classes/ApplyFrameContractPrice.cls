@@ -71,17 +71,15 @@ global with sharing class ApplyFrameContractPrice implements vlocity_cmt.Vlocity
 				             		
 				             	oObjectSO.put(nameSpacePrefix+'OverageCharge__c', (Decimal) line.get(nameSpaceprefix+'OverageCharge__c'));
 				             	oObjectSO.put(nameSpacePrefix+'OverageDiscountPrice__c', (Decimal) line.get(nameSpaceprefix+'OverageDiscountPrice__c'));	
-				             	oObjectSO.put(nameSpacePrefix+'OverageManualDiscount__c', (Decimal) line.get(nameSpaceprefix+'OverageManualDiscount__c'));
+				             	oObjectSO.put(nameSpacePrefix+'OverageManualDiscount__c', (Decimal) line.get(nameSpacePrefix+'OverageManualDiscount__c'));
 				             	oObjectSO.put(nameSpacePrefix+'OverageTotal__c', (Decimal) line.get(nameSpaceprefix+'OverageTotal__c'));          		
 				             	
-				             	if((Decimal) line.get(nameSpaceprefix+'RecurringCharge__c') != null){
-				             		oObjectSO.put(nameSpacePrefix+'RecurringCharge__c', (Decimal) line.get(nameSpaceprefix+'RecurringCharge__c'));
-				             	}
+				             	oObjectSO.put(nameSpacePrefix+'RecurringCharge__c', (Decimal) line.get(nameSpaceprefix+'RecurringCharge__c') * 1);	
 				             	oObjectSO.put(nameSpacePrefix+'RecurringDiscountPrice__c', (Decimal) line.get(nameSpaceprefix+'RecurringDiscountPrice__c'));
 				             	oObjectSO.put(nameSpacePrefix+'RecurringManualDiscount__c', (Decimal) line.get(nameSpaceprefix+'RecurringManualDiscount__c'));	
-				             	oObjectSO.put(nameSpacePrefix+'RecurringTotal__c', (Decimal) line.get(nameSpaceprefix+'RecurringTotal__c'));
+				             	oObjectSO.put(nameSpacePrefix+'RecurringTotal__c', (Decimal) line.get(nameSpacePrefix+'RecurringTotal__c'));
 				             	oObjectSO.put(nameSpacePrefix+'RecurringUOM__c', (String) line.get(nameSpaceprefix+'RecurringUOM__c'));	
-				             	oObjectSO.put(nameSpacePrefix+'LastPricedDate__c', System.today());
+				             	oObjectSO.put(nameSpacePrefix+'IsFrameContractPriced__c', true);
 			        	 	}           	
 			             }		             
 			       }
@@ -93,7 +91,7 @@ global with sharing class ApplyFrameContractPrice implements vlocity_cmt.Vlocity
          
     }
 
-    private Boolean resetFrameContract(Map<String, Object> inputMap, Map<String, Object> outputMap, Map<String, Object> optionsMap){
+    private Boolean validateFrameContract(Map<String, Object> inputMap, Map<String, Object> outputMap, Map<String, Object> optionsMap){
         return true;
     }
     
@@ -122,7 +120,7 @@ global with sharing class ApplyFrameContractPrice implements vlocity_cmt.Vlocity
     	
     	String whereClause = ' where '+nameSpaceprefix+'Product2Id__c IN :productIdList  AND '+nameSpaceprefix+'ContractId__c In (select '+nameSpaceprefix+'frameContractId__c from '+parentObjName +' where Id= \'' +parentId+'\''+')';
         query +=whereClause;
-        query += ' LIMIT 200';
+        query += ' ORDER BY CreatedDate DESC';
         System.debug(' line item query is ' +query);
         List<Sobject> contractLineList = database.query(query);
         
